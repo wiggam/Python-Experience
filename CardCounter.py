@@ -1,3 +1,6 @@
+""" See https://www.youtube.com/watch?v=Vf9Yh9BuN-w&t=4s&ab_channel=GeorgeWiggam for a video on how to use the program and a walkthrough of the code """
+
+
 import tkinter
 from tkinter import Tk
 
