@@ -1,6 +1,6 @@
 """ See https://www.youtube.com/watch?v=Vf9Yh9BuN-w&t=4s&ab_channel=GeorgeWiggam for a video on how to use the program
 and a walkthrough of the code. Some of the code below will not match the video since it was updated to improve
- efficiency per advice recieved from a friend. """
+efficiency per advice recieved from a friend. """
 
 import tkinter
 from tkinter import Tk
