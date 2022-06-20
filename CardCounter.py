@@ -1,5 +1,6 @@
-""" See https://www.youtube.com/watch?v=Vf9Yh9BuN-w&t=4s&ab_channel=GeorgeWiggam for a video on how to use the program and a walkthrough of the code """
-
+""" See https://www.youtube.com/watch?v=Vf9Yh9BuN-w&t=4s&ab_channel=GeorgeWiggam for a video on how to use the program
+and a walkthrough of the code. Some of the code below will not match the video since it was updated to improve
+ efficiency per advice recieved from a friend. """
 
 import tkinter
 from tkinter import Tk
@@ -13,6 +14,7 @@ class CardCounter(Tk):
         self.deck = {}
         self.cards_remaining = []
         self.probability = 0
+        self.value_list = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
 
         # configure the root window
         self.title("Card Counter")
@@ -109,13 +111,9 @@ class CardCounter(Tk):
             "C": ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"],
             "S": ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"],
         }
-        suit_list = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
-        new_suit_list = []
 
-        # creates the duplicates of the cards
-        for x in suit_list:
-            for _ in range(self.num_decks.get()):
-                new_suit_list.append(x)
+        # uses list comprehension to create duplicates of the cards
+        new_suit_list = [value for value in self.value_list for x in range(self.num_decks.get())]
 
         # updates the card_deck, MUST USE COPY SO DICT VALUES DO NOT SHARE SAME ID
         for suite in card_deck:
@@ -126,10 +124,8 @@ class CardCounter(Tk):
         return_text = "Updated with {} decks".format(self.num_decks.get())
         self.deck_result_label.config(text=return_text)
 
-        # create a list of all the cards (regardless of suit)
-        for suite in self.deck:
-            for cards in self.deck[suite]:
-                self.cards_remaining.append(cards)
+        # uses list comprehension to create a list of all the cards (regardless of suit)
+        self.cards_remaining = [cards for suite in self.deck for cards in self.deck[suite]]
 
         # count the number of suites
         self.count_suites()
@@ -138,9 +134,8 @@ class CardCounter(Tk):
     def count_cards(self):
         """Counts the remaining cards and give the probability of receiving each card"""
         # fills an empty dictionary with the results
-        face_list = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
         all_card_prob = {}
-        for card in face_list:
+        for card in self.value_list:
             all_card_prob[card] = "{}, {:.2f}%".format(self.cards_remaining.count(card),
                                                        self.cards_remaining.count(card) /
                                                        len(self.cards_remaining) * 100)
@@ -148,7 +143,7 @@ class CardCounter(Tk):
         # Translate the dictionary into a string so that it is printable
         printable_results = f"{len(self.cards_remaining)}\n"
         for key in all_card_prob:
-            printable_results += f"{key}: {all_card_prob[key]}\n"
+            printable_results = ''.join([printable_results, f"{key}: {all_card_prob[key]}\n"])
 
         self.remaining_probability_label.config(text=printable_results)
 
@@ -164,12 +159,12 @@ class CardCounter(Tk):
         new_line = 0
         for suite in suite_prob:
             if new_line != 1:
-                printable_results += f"{suite}: {suite_prob[suite]}, " \
-                                     f"{(int(suite_prob[suite])/len(self.cards_remaining))*100:.2f}%  "
+                printable_results = "".join([printable_results, f"{suite}: {suite_prob[suite]}, "
+                                             f"{(int(suite_prob[suite])/len(self.cards_remaining))*100:.2f}% "])
                 new_line += 1
             else:
-                printable_results += f"{suite}: {suite_prob[suite]}, " \
-                                     f"{(int(suite_prob[suite])/len(self.cards_remaining))*100:.2f}%\n  "
+                printable_results = "".join([printable_results, f"{suite}: {suite_prob[suite]}, " 
+                                             f"{(int(suite_prob[suite])/len(self.cards_remaining))*100:.2f}% \n"])
                 new_line += 1
 
         # return the printable string
@@ -255,25 +250,3 @@ class CardCounter(Tk):
 if __name__ == "__main__":
     lets_run_it = CardCounter()
     lets_run_it.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
